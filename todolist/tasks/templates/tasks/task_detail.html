@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Detalles de la Tarea: {{ task.title }}</h1>
+  <p><strong>Descripción:</strong> {{ task.description }}</p>
+  <p><strong>Fecha de Vencimiento:</strong> {{ task.due_date }}</p>
+  <p><strong>Estado:</strong> {{ task.get_status_display }}</p>
+  <p><strong>Etiqueta:</strong> {{ task.tag }}</p>
+  
+  {% if task.user == request.user and not task.status == 'C' %}
+    <a href="{% url 'tasks:task_edit' task.id %}">Editar</a>
+    <a href="{% url 'tasks:task_delete' task.id %}">Eliminar</a>
+  {% endif %}
+  
+  <a href="{% url 'tasks:task_list' %}">Volver a la lista de tareas</a>
+{% endblock %}
