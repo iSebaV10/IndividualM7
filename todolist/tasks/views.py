@@ -2,12 +2,18 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q
 from datetime import date
+from django.contrib.auth.views import LoginView
+from django.urls import reverse_lazy
 
 from .models import Task
 from .forms import TaskForm
 
 def index_view(request):
-    return render(request, 'index.html')
+    return render(request, 'tasks/index.html')
+
+class CustomLoginView(LoginView):
+    template_name = 'tasks/login.html'  # Ruta a tu archivo login.html
+    success_url = reverse_lazy('tasks/task_list.html')  # Ruta a la página después de iniciar sesión
 
 def task_list(request):
     """
@@ -23,7 +29,7 @@ def task_detail(request, task_id):
     task = get_object_or_404(Task, id=task_id, user=request.user)
     return render(request, 'tasks/task_detail.html', {'task': task})
 
-@login_required
+
 def task_create(request):
     """
     Vista para crear una nueva tarea.
@@ -34,7 +40,7 @@ def task_create(request):
             task = form.save(commit=False)
             task.user = request.user
             task.save()
-            return redirect('tasks:task_list')
+            return redirect('tasks/task_list.html')
     else:
         form = TaskForm()
     return render(request, 'tasks/task_form.html', {'form': form})
