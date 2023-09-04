@@ -11,8 +11,6 @@
     <a href="{% url 'task_edit' task.id %}">Editar</a>
     <a href="{% url 'task_delete' task.id %}">Eliminar</a>
   {% endif %}
-
-  {{task.id}}
   
   <a href="{% url 'tasks_list' %}">Volver a la lista de tareas</a>
 {% endblock %}

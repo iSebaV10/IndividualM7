@@ -1,10 +1,14 @@
 {% extends 'tasks/base.html' %}
 
 {% block content %}
-  <h1>Estadísticas de Tareas</h1>
+
+
+<h1>Estadísticas de Tareas</h1>
   <p>Tareas Pendientes: {{ pending_count }}</p>
   <p>Tareas Completadas: {{ completed_count }}</p>
   <p>Tareas en Progreso: {{ in_progress_count }}</p>
   <p>Tareas Vencidas: {{ overdue_count }}</p>
   <a href="{% url 'tasks_list' %}">Volver a la lista de tareas</a>
+
+
 {% endblock %}
