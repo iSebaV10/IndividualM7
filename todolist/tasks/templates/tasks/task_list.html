@@ -4,7 +4,7 @@
   <h1>Tareas Pendientes</h1>
 
   {% if request.user.is_authenticated %}
-    <p>Bienvenido, {{ request.user.username }}!</p>
+    <p>Bienvenido, {{ user.id }}!</p>
     <p>Aquí puedes ver tus tareas pendientes.</p>
   {% else %}
     <p>Inicia sesión para acceder a tus tareas.</p>
@@ -13,12 +13,13 @@
   <ul>
     {% for task in tasks %}
       <li>
-        <a href="{% url 'tasks:task_detail' task.id %}">{{ task.title }}</a>
+        <a href="{% url 'task_detail' task.id %}">{{ task.title }}</a>
         ({{ task.due_date }})
       </li>
     {% empty %}
       <li>No hay tareas pendientes.</li>
     {% endfor %}
   </ul>
-  <a href="{% url 'tasks:task_create' %}">Crear Nueva Tarea</a>
+  <a href="{% url 'task_create' user.id %}">Crear Nueva Tarea</a>
+  {{user.id}}
 {% endblock %}

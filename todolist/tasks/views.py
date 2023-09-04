@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Count, Q
 from datetime import date
 from django.contrib.auth.views import LoginView
-from django.urls import reverse_lazy
+from django.urls import reverse
 
 from .models import Task
 from .forms import TaskForm
@@ -11,10 +11,11 @@ from .forms import TaskForm
 def index_view(request):
     return render(request, 'tasks/index.html')
 
-class CustomLoginView(LoginView):
-    template_name = 'tasks/login.html'  # Ruta a tu archivo login.html
-    success_url = reverse_lazy('tasks/task_list.html')  # Ruta a la página después de iniciar sesión
 
+'''class CustomLoginView(LoginView):
+    template_name = 'registration/login.html'  # Ruta a tu archivo login.html
+    success_url = reverse_lazy('tasks/task_list.html')  # Ruta a la página después de iniciar sesión
+'''
 def task_list(request):
     """
     Vista para mostrar la lista de tareas pendientes del usuario.
@@ -26,11 +27,11 @@ def task_detail(request, task_id):
     """
     Vista para mostrar los detalles de una tarea.
     """
-    task = get_object_or_404(Task, id=task_id, user=request.user)
+    task = get_object_or_404(Task, id=task_id)
     return render(request, 'tasks/task_detail.html', {'task': task})
 
 
-def task_create(request):
+def task_create(request, id):
     """
     Vista para crear una nueva tarea.
     """
@@ -38,11 +39,11 @@ def task_create(request):
         form = TaskForm(request.POST)
         if form.is_valid():
             task = form.save(commit=False)
-            task.user = request.user
+            task.user_id = id
             task.save()
-            return redirect('tasks/task_list.html')
-    else:
-        form = TaskForm()
+            return redirect('tasks_list')
+
+    form = TaskForm()
     return render(request, 'tasks/task_form.html', {'form': form})
 
 @login_required
@@ -50,25 +51,36 @@ def task_edit(request, task_id):
     """
     Vista para editar una tarea existente.
     """
-    task = get_object_or_404(Task, id=task_id, user=request.user)
+    task = get_object_or_404(Task, id=task_id)
+    if request.method == 'GET':
+        form = TaskForm(instance=task)
+        return render(request, 'tasks/edit_form.html',{
+            #"formEditTask": formEditTask
+            'form': form, 'edit_mode': True, 'task': task
+        })
+
     if request.method == 'POST':
         form = TaskForm(request.POST, instance=task)
         if form.is_valid():
             form.save()
-            return redirect('tasks:task_detail', task_id=task.id)
-    else:
-        form = TaskForm(instance=task)
-    return render(request, 'tasks/task_form.html', {'form': form, 'edit_mode': True, 'task': task})
+            #return redirect(reverse('task_detail', args=[task.id]))
+            return redirect('task_detail', task_id=task_id)
+    
+    '''
+     form = TaskForm(instance=task)
+    return render(request, 'tasks/edit_form.html', {'form': form, 'edit_mode': True, 'task': task})
+    '''
+   
 
 @login_required
 def task_delete(request, task_id):
     """
     Vista para eliminar una tarea.
     """
-    task = get_object_or_404(Task, id=task_id, user=request.user)
+    task = get_object_or_404(Task, id=task_id)
     if request.method == 'POST':
         task.delete()
-        return redirect('tasks:task_list')
+        return redirect('tasks_list')
     return render(request, 'tasks/task_confirm_delete.html', {'task': task})
 
 @login_required

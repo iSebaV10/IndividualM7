@@ -1,0 +1,18 @@
+{% extends "tasks/base.html" %}
+
+{% block content %}
+    <h1>Confirmar Eliminación de Tarea</h1>
+    <p>¿Estás seguro de que deseas eliminar la siguiente tarea?</p>
+    
+    <ul>
+        <li><strong>Tarea:</strong> {{ task.title }}</li>
+        <li><strong>Descripción:</strong> {{ task.description }}</li>
+        <li><strong>Fecha de Vencimiento:</strong> {{ task.due_date }}</li>
+    </ul>
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="submit" value="Eliminar">
+        <a href="{% url 'tasks_list' %}">Cancelar</a>
+    </form>
+{% endblock %}

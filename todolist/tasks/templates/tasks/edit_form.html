@@ -2,7 +2,7 @@
 
 {% block content %}
   <h1>{% if edit_mode %}Editar Tarea{% else %}Crear Nueva Tarea{% endif %}</h1>
-  <form action="{% url 'task_create' user.id %}" method="POST">
+  <form method="POST">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Guardar</button>

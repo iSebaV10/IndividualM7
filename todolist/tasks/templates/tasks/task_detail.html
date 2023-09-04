@@ -8,9 +8,11 @@
   <p><strong>Etiqueta:</strong> {{ task.tag }}</p>
   
   {% if task.user == request.user and not task.status == 'C' %}
-    <a href="{% url 'tasks:task_edit' task.id %}">Editar</a>
-    <a href="{% url 'tasks:task_delete' task.id %}">Eliminar</a>
+    <a href="{% url 'task_edit' task.id %}">Editar</a>
+    <a href="{% url 'task_delete' task.id %}">Eliminar</a>
   {% endif %}
+
+  {{task.id}}
   
-  <a href="{% url 'tasks:task_list' %}">Volver a la lista de tareas</a>
+  <a href="{% url 'tasks_list' %}">Volver a la lista de tareas</a>
 {% endblock %}
