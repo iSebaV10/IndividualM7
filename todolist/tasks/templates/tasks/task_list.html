@@ -15,6 +15,7 @@
       <li>
         <a href="{% url 'task_detail' task.id %}">{{ task.title }}</a>
         ({{ task.due_date }})
+        {{ task.priority }}
       </li>
     {% empty %}
       <li>No hay tareas pendientes.</li>

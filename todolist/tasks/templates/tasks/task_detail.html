@@ -2,10 +2,13 @@
 
 {% block content %}
   <h1>Detalles de la Tarea: {{ task.title }}</h1>
+  <p><strong>Creada por:</strong> {{ task.user }}</p>
+  <p><strong>Asignada a:</strong> {{ task.assigned_to }}</p>
   <p><strong>Descripción:</strong> {{ task.description }}</p>
   <p><strong>Fecha de Vencimiento:</strong> {{ task.due_date }}</p>
   <p><strong>Estado:</strong> {{ task.get_status_display }}</p>
   <p><strong>Etiqueta:</strong> {{ task.tag }}</p>
+  <p><strong>Prioridad:</strong> {{ task.priority }}</p>
   
   {% if task.user == request.user and not task.status == 'C' %}
     <a href="{% url 'task_edit' task.id %}">Editar</a>

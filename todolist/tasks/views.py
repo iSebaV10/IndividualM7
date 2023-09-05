@@ -11,16 +11,12 @@ from .forms import TaskForm
 def index_view(request):
     return render(request, 'tasks/index.html')
 
-
-'''class CustomLoginView(LoginView):
-    template_name = 'registration/login.html'  # Ruta a tu archivo login.html
-    success_url = reverse_lazy('tasks/task_list.html')  # Ruta a la página después de iniciar sesión
-'''
 def task_list(request):
     """
     Vista para mostrar la lista de tareas pendientes del usuario.
     """
-    tasks = Task.objects.filter(user=request.user).order_by('due_date')
+    tasks = Task.objects.filter(assigned_to = request.user)
+    #tasks = Task.objects.filter(user=request.user).order_by('due_date')
     return render(request, 'tasks/task_list.html', {'tasks': tasks})
 
 def task_detail(request, task_id):
@@ -66,10 +62,6 @@ def task_edit(request, task_id):
             #return redirect(reverse('task_detail', args=[task.id]))
             return redirect('task_detail', task_id=task_id)
     
-    '''
-     form = TaskForm(instance=task)
-    return render(request, 'tasks/edit_form.html', {'form': form, 'edit_mode': True, 'task': task})
-    '''
    
 
 @login_required
